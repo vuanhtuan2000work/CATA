@@ -31,7 +31,7 @@ export function startServer(port: number, onEvent: EventSink): http.Server {
           type: body.type ?? "custom",
           title: body.title,
           message: String(body.message).slice(0, 500),
-          priority: body.priority === "high" ? "high" : "normal",
+          priority: body.priority === "normal" ? "normal" : "high",
         };
         onEvent(event);
         return json(res, 200, { ok: true });

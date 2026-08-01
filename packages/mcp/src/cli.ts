@@ -20,7 +20,7 @@ function textResult(text: string) {
 
 const server = new McpServer({ name: "cata", version: "0.1.0" });
 
-const sayHandler = async ({ message, title, priority }: { message: string; title?: string; priority?: "normal" | "high" }) => {
+const sayHandler = async ({ message, title, priority = "high" }: { message: string; title?: string; priority?: "normal" | "high" }) => {
   try {
     await petFetch("/event", {
       method: "POST",
