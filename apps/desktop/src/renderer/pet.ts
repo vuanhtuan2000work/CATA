@@ -311,12 +311,32 @@ function appendChat(role: "you" | "pet", text: string): void {
 
 function positionChat(): void {
   if (!chatOpen) return;
-  const width = 280;
-  let cx = x + displayW + 8;
-  let cy = Math.max(4, y - 40);
-  if (cx + width > window.innerWidth - 4) cx = x - width - 8;
-  cx = Math.max(4, Math.min(window.innerWidth - width - 4, cx));
-  cy = Math.max(4, Math.min(window.innerHeight - 220, cy));
+  const chatWidth = 280;
+  const chatRect = chatEl.getBoundingClientRect();
+  const chatHeight = chatRect.height || 220;
+
+  let cx = x + displayW + 12;
+  if (cx + chatWidth > window.innerWidth - 8) {
+    cx = x - chatWidth - 12;
+  }
+  cx = Math.max(8, Math.min(window.innerWidth - chatWidth - 8, cx));
+
+  let cy = Math.max(8, Math.min(window.innerHeight - chatHeight - 8, y + displayH - chatHeight));
+
+  const bubbleShowing = bubbleEl.classList.contains("visible");
+  if (bubbleShowing) {
+    const bRect = bubbleEl.getBoundingClientRect();
+    if (bRect.height > 0) {
+      if (cy < bRect.bottom && cy + chatHeight > bRect.top) {
+        if (bRect.bottom + 6 + chatHeight <= window.innerHeight - 8) {
+          cy = bRect.bottom + 6;
+        } else if (bRect.top - chatHeight - 8 >= 8) {
+          cy = bRect.top - chatHeight - 8;
+        }
+      }
+    }
+  }
+
   chatEl.style.left = `${cx}px`;
   chatEl.style.top = `${cy}px`;
 }
