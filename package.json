@@ -1,15 +1,15 @@
 {
-  "name": "cursor-pet",
+  "name": "cata",
   "version": "0.1.0",
   "private": true,
-  "description": "Living desktop cat for Cursor IDE — agent hooks, MCP reminders, follow-cursor overlay for Windows & macOS",
+  "description": "Living desktop cat (CATA) for IDEs & AI Agents — Antigravity, Cursor, MCP & desktop overlay",
   "keywords": [
-    "cursor",
-    "cursor-ide",
+    "cata",
     "desktop-pet",
+    "antigravity",
+    "cursor",
     "electron",
     "mcp",
-    "cursor-hooks",
     "ai-companion",
     "developer-tools",
     "overlay",
@@ -17,12 +17,12 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/vuanhtuan2000work/cursor-pet.git"
+    "url": "https://github.com/vuanhtuan2000work/CATA.git"
   },
   "bugs": {
-    "url": "https://github.com/vuanhtuan2000work/cursor-pet/issues"
+    "url": "https://github.com/vuanhtuan2000work/CATA/issues"
   },
-  "homepage": "https://github.com/vuanhtuan2000work/cursor-pet#readme",
+  "homepage": "https://github.com/vuanhtuan2000work/CATA#readme",
   "license": "MIT",
   "author": "vuanhtuan2000work",
   "workspaces": [
@@ -30,13 +30,14 @@
     "packages/mcp"
   ],
   "scripts": {
-    "build": "npm run build -w @cursor-pet/desktop && npm run build -w @cursor-pet/mcp",
-    "dev": "npm run dev -w @cursor-pet/desktop",
-    "start": "npm run start -w @cursor-pet/desktop",
-    "dist": "npm run dist -w @cursor-pet/desktop",
-    "dist:mac": "npm run dist:mac -w @cursor-pet/desktop",
+    "build": "npm run build -w @cata/desktop && npm run build -w @cata/mcp",
+    "dev": "npm run dev -w @cata/desktop",
+    "start": "npm run start -w @cata/desktop",
+    "dist": "npm run dist -w @cata/desktop",
+    "dist:mac": "npm run dist:mac -w @cata/desktop",
     "install:hooks": "node hooks/install-hooks.js",
-    "install:mcp": "node scripts/install-mcp.js"
+    "install:mcp": "node scripts/install-mcp.js",
+    "install:mcp:antigravity": "node scripts/install-mcp-antigravity.js"
   },
   "devDependencies": {
     "typescript": "^7.0.2"

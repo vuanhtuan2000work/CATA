@@ -1,11 +1,11 @@
 {
-  "name": "@cursor-pet/mcp",
+  "name": "@cata/mcp",
   "version": "0.1.0",
   "private": true,
-  "description": "MCP server exposing pet_say / pet_remind / pet_status for the Cursor Pet overlay",
+  "description": "MCP server exposing pet_say / pet_remind / pet_status for the CATA desktop overlay",
   "type": "module",
   "bin": {
-    "cursor-pet-mcp": "dist/cli.js"
+    "cata-mcp": "dist/cli.js"
   },
   "scripts": {
     "build": "tsc -p tsconfig.json"

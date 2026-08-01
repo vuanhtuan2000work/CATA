@@ -1,8 +1,8 @@
 {
-  "name": "@cursor-pet/desktop",
+  "name": "@cata/desktop",
   "version": "0.1.0",
   "private": true,
-  "description": "Cursor Pet desktop overlay (Electron)",
+  "description": "CATA desktop overlay (Electron)",
   "main": "dist/main/index.js",
   "scripts": {
     "build": "tsc -p tsconfig.main.json && tsc -p tsconfig.renderer.json && node scripts/copy-static.js && node scripts/gen-icon.js",
@@ -12,8 +12,8 @@
     "dist:mac": "npm run build && electron-builder --mac"
   },
   "build": {
-    "appId": "com.cursorpet.desktop",
-    "productName": "Cursor Pet",
+    "appId": "com.cata.desktop",
+    "productName": "CATA",
     "files": [
       "dist/**/*",
       "assets/**/*"

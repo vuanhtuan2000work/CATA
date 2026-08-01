@@ -1,4 +1,4 @@
-// Adds the cursor-pet MCP server to ~/.cursor/mcp.json (preserving other servers).
+// Adds the cata MCP server to ~/.cursor/mcp.json (preserving other servers).
 const fs = require("node:fs");
 const os = require("node:os");
 const path = require("node:path");
@@ -7,7 +7,7 @@ const mcpJsonPath = path.join(os.homedir(), ".cursor", "mcp.json");
 const cliPath = path.join(__dirname, "..", "packages", "mcp", "dist", "cli.js");
 
 if (!fs.existsSync(cliPath)) {
-  console.error(`MCP server not built yet. Run: npm run build -w @cursor-pet/mcp`);
+  console.error(`MCP server not built yet. Run: npm run build -w @cata/mcp`);
   process.exit(1);
 }
 
@@ -21,11 +21,11 @@ if (fs.existsSync(mcpJsonPath)) {
   }
 }
 config.mcpServers = config.mcpServers || {};
-config.mcpServers["cursor-pet"] = {
+config.mcpServers["cata"] = {
   command: "node",
   args: [cliPath],
 };
 
 fs.mkdirSync(path.dirname(mcpJsonPath), { recursive: true });
 fs.writeFileSync(mcpJsonPath, JSON.stringify(config, null, 2), "utf8");
-console.log(`Registered cursor-pet MCP server in ${mcpJsonPath}`);
+console.log(`Registered cata MCP server in ${mcpJsonPath}`);

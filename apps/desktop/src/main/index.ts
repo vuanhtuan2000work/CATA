@@ -16,7 +16,7 @@ import {
 import { createTray, destroyTray } from "./tray";
 import { createReminderPopup, setupReminderIpc } from "./reminderWindow";
 
-app.setName("cursor-pet");
+app.setName("cata");
 
 function startReminderScheduler(): void {
   setInterval(() => {

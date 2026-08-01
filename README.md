@@ -1,33 +1,33 @@
-# Cursor Pet
+# CATA 🐱
 
 <p align="center">
-  <img src="apps/desktop/assets/icon.png" alt="Cursor Pet logo" width="180" />
+  <img src="apps/desktop/assets/icon.png" alt="CATA logo" width="180" />
 </p>
 
 <p align="center">
-  <strong>A living desktop cat for <a href="https://cursor.com">Cursor</a></strong><br/>
+  <strong>A living desktop cat for AI Agents & IDEs (<a href="https://antigravity.google">Antigravity</a>, <a href="https://cursor.com">Cursor</a>, etc.)</strong><br/>
   Celebrates finished agent work · Follows your mouse · Reminds you what matters
 </p>
 
 <p align="center">
-  <a href="https://github.com/vuanhtuan2000work/cursor-pet/stargazers"><img src="https://img.shields.io/github/stars/vuanhtuan2000work/cursor-pet?style=flat-square" alt="Stars" /></a>
+  <a href="https://github.com/vuanhtuan2000work/CATA/stargazers"><img src="https://img.shields.io/github/stars/vuanhtuan2000work/CATA?style=flat-square" alt="Stars" /></a>
   <a href="./LICENSE"><img src="https://img.shields.io/badge/license-MIT-yellow.svg?style=flat-square" alt="MIT" /></a>
   <a href="#quick-start"><img src="https://img.shields.io/badge/platform-Windows%20%7C%20macOS-blue?style=flat-square" alt="Platform" /></a>
   <a href="#quick-start"><img src="https://img.shields.io/badge/node-%3E%3D20-brightgreen?style=flat-square" alt="Node" /></a>
-  <a href="#mcp-tools"><img src="https://img.shields.io/badge/MCP-pet__say%20·%20pet__remind-111111?style=flat-square" alt="MCP" /></a>
+  <a href="#mcp-tools"><img src="https://img.shields.io/badge/MCP-cata__say%20·%20cata__remind-111111?style=flat-square" alt="MCP" /></a>
 </p>
 
 ---
 
 ## Why?
 
-Long Cursor sessions feel empty when the agent finishes in silence. Cursor Pet puts a small companion on your desktop that reacts to what you do — without getting in the way.
+Long AI coding sessions feel empty when the agent finishes in silence. CATA puts a small desktop cat companion on your screen that reacts to what you do and what your AI agents complete — without getting in the way.
 
 | | |
 |---|---|
 | **Announce** | Agent stop, todo done, commit / push |
 | **Chase** | Follows your cursor (toggle anytime) |
-| **Remind** | Tray, chat inbox, or MCP `pet_remind` |
+| **Remind** | Tray, chat inbox, or MCP `cata_remind` |
 | **Stay out of the way** | Click-through until you point at the cat |
 
 Local-only on `127.0.0.1` — no cloud, no telemetry.
@@ -38,11 +38,11 @@ Local-only on `127.0.0.1` — no cloud, no telemetry.
 
 - **Transparent overlay** — always-on-top, frameless, drag / double-click / roam
 - **Follow cursor** — sprint after the mouse; tray toggle
-- **Cursor hooks** — agent stop, `TodoWrite`, `git commit` / `git push`
+- **AI Agent & IDE hooks** — agent stop, `TodoWrite`, `git commit` / `git push`
 - **Chat inbox** — double-click the pet (or tray → Chat inbox) for notes & quick reminders
-- **i18n** — Auto from Cursor / OS locale, or force en · vi · zh · ja · ko
-- **MCP tools** — agent can `pet_say`, `pet_remind`, `pet_status`
-- **Git watcher** — celebrate commits outside Cursor too
+- **i18n** — Auto from system / IDE locale, or force en · vi · zh · ja · ko
+- **MCP tools** — agents in Antigravity or Cursor can `cata_say`, `cata_remind`, `cata_status`
+- **Git watcher** — celebrate commits outside IDEs too
 - **Physics splat** — drop from high enough → puddle → pop back
 - **Single tray icon** — one instance only
 
@@ -50,19 +50,32 @@ Local-only on `127.0.0.1` — no cloud, no telemetry.
 
 ## Quick start
 
-**Need:** Node.js **20+**, Cursor (for hooks / MCP).
+**Need:** Node.js **20+**.
 
 ```bash
-git clone https://github.com/vuanhtuan2000work/cursor-pet.git
-cd cursor-pet
+git clone https://github.com/vuanhtuan2000work/CATA.git
+cd CATA
 npm install
 npm run build
-npm run install:hooks   # ~/.cursor/hooks.json
-npm run install:mcp     # ~/.cursor/mcp.json
-npm start
 ```
 
-Restart Cursor once after installing hooks / MCP.
+### Install MCP for Google Antigravity
+```bash
+npm run install:mcp:antigravity
+```
+Registers CATA in `~/.gemini/config/mcp_config.json`.
+
+### Install MCP for Cursor
+```bash
+npm run install:mcp
+npm run install:hooks   # ~/.cursor/hooks.json
+```
+Registers CATA in `~/.cursor/mcp.json` and configures Cursor hooks.
+
+### Start CATA
+```bash
+npm start
+```
 
 <details>
 <summary><strong>Packaged builds</strong></summary>
@@ -79,9 +92,9 @@ npm run dist:mac    # .dmg + .zip (build on a Mac)
 ## How it works
 
 ```text
-Cursor hooks / MCP ──POST──► 127.0.0.1:7331 ──IPC──► Overlay pet
-                                      ▲
-                    Tray · Chat inbox · Git reflog watcher
+Antigravity / Cursor / MCP ──POST──► 127.0.0.1:7331 ──IPC──► Overlay pet
+                                           ▲
+                         Tray · Chat inbox · Git reflog watcher
 ```
 
 1. Electron opens a **full-screen transparent overlay** (click-through by default).
@@ -97,21 +110,22 @@ Double-click the pet (or use the tray menu):
 - Leave a short note → the pet acknowledges in a bubble
 - Set a reminder, e.g. `remind me in 10m to review the PR`
 
-This is a **local** inbox (notes / reminders). It does **not** replace Cursor Agent chat.
+This is a **local** inbox (notes / reminders). It does **not** replace AI Agent chat.
 
 ---
 
 ## MCP tools
 
-After `npm run install:mcp`:
+Supported in **Google Antigravity**, **Cursor**, and any standard MCP host:
 
-| Tool | Purpose |
-|------|---------|
-| `pet_say` | Speech bubble now (`priority: high` → excited hops) |
-| `pet_remind` | Schedule a reminder (`at` = ISO, or soon) |
-| `pet_status` | App running? Pending reminders? |
+| Tool | Alias | Purpose |
+|------|-------|---------|
+| `cata_say` | `pet_say` | Speech bubble now (`priority: high` → excited hops) |
+| `cata_remind` | `pet_remind` | Schedule a reminder (`at` = ISO, or soon) |
+| `cata_status` | `pet_status` | App running? Pending reminders? |
 
-Example: *“When you’re done, use `pet_say` to tell me the PR is ready.”*
+Example prompt for your AI agent:
+> *"When you're done building the feature, call `cata_say` to tell me the PR is ready."*
 
 ---
 
@@ -127,7 +141,7 @@ Right-click the tray / menu-bar icon:
 - Start with Windows / macOS  
 - Quit  
 
-**Language:** Auto (Cursor `locale.json` → OS) or lock to en / vi / zh / ja / ko.
+**Language:** Auto (OS locale) or lock to en / vi / zh / ja / ko.
 
 ---
 
@@ -135,8 +149,8 @@ Right-click the tray / menu-bar icon:
 
 | OS | Path |
 |----|------|
-| Windows | `%APPDATA%/cursor-pet/settings.json` |
-| macOS | `~/Library/Application Support/cursor-pet/settings.json` |
+| Windows | `%APPDATA%/cata/settings.json` |
+| macOS | `~/Library/Application Support/cata/settings.json` |
 
 ```json
 {
@@ -149,7 +163,7 @@ Right-click the tray / menu-bar icon:
 }
 ```
 
-Override the port with `CURSOR_PET_PORT` (app, hooks, and MCP all honor it).
+Override the port with `CATA_PORT` (app, hooks, and MCP all honor it).
 
 ---
 
@@ -168,13 +182,14 @@ Override the port with `CURSOR_PET_PORT` (app, hooks, and MCP all honor it).
 ## Architecture
 
 ```text
-cursor-pet/
+CATA/
 ├── apps/desktop/     Electron overlay (main + renderer + frames)
 ├── packages/mcp/     MCP server → localhost API
-└── hooks/            Cursor hook scripts + installer
+├── hooks/            Cursor hook scripts + installer
+└── scripts/          MCP installers for Antigravity & Cursor
 ```
 
-**Stack:** Electron · TypeScript · Cursor Hooks · MCP · Node.js
+**Stack:** Electron · TypeScript · MCP · Google Antigravity · Cursor Hooks · Node.js
 
 ---
 
@@ -201,10 +216,13 @@ Issues and PRs welcome.
 <details>
 <summary><strong>Tiếng Việt</strong></summary>
 
-**Cursor Pet** là mèo desktop trên overlay trong suốt: báo khi agent xong, theo chuột, nhắc việc, chat inbox local, và nói qua MCP. Ngôn ngữ tự theo Cursor / hệ thống (hoặc chọn trong tray).
+**CATA** là chú mèo desktop trên overlay trong suốt: báo khi AI agent (Antigravity, Cursor, v.v.) hoàn thành công việc, đuổi theo con trỏ chuột, nhắc việc, chat inbox local, và nhận thông báo qua giao thức MCP (`cata_say`, `cata_remind`).
 
 ```bash
-npm install && npm run build && npm run install:hooks && npm run install:mcp && npm start
+npm install && npm run build
+npm run install:mcp:antigravity   # Cắm MCP vào Antigravity
+npm run install:mcp               # Cắm MCP vào Cursor
+npm start
 ```
 
 </details>
@@ -218,5 +236,5 @@ npm install && npm run build && npm run install:hooks && npm run install:mcp && 
 <p align="center">
   <br/>
   <img src="apps/desktop/assets/icon.png" alt="" width="64" /><br/>
-  <sub>If Cursor Pet makes your sessions a little happier, <a href="https://github.com/vuanhtuan2000work/cursor-pet">star the repo</a> ⭐</sub>
+  <sub>If CATA makes your coding sessions a little happier, <a href="https://github.com/vuanhtuan2000work/CATA">star the repo</a> ⭐</sub>
 </p>
