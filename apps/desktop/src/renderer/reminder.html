@@ -1,0 +1,72 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Add reminder</title>
+    <style>
+      body {
+        margin: 0;
+        padding: 18px;
+        font-family: -apple-system, "Segoe UI", sans-serif;
+        font-size: 13px;
+        background: #fffdf5;
+        color: #243447;
+      }
+      h3 {
+        margin: 0 0 12px;
+        font-size: 15px;
+      }
+      label {
+        display: block;
+        margin-bottom: 4px;
+        font-weight: 600;
+      }
+      textarea,
+      input {
+        width: 100%;
+        box-sizing: border-box;
+        border: 2px solid #243447;
+        border-radius: 8px;
+        padding: 7px 9px;
+        font-family: inherit;
+        font-size: 13px;
+        background: #fff;
+        margin-bottom: 12px;
+      }
+      textarea {
+        height: 56px;
+        resize: none;
+      }
+      .row {
+        display: flex;
+        gap: 8px;
+        justify-content: flex-end;
+      }
+      button {
+        border: 2px solid #243447;
+        border-radius: 8px;
+        padding: 6px 16px;
+        font-family: inherit;
+        font-size: 13px;
+        font-weight: 600;
+        cursor: pointer;
+        background: #fff;
+      }
+      button.primary {
+        background: #f2a65a;
+      }
+    </style>
+  </head>
+  <body>
+    <h3 id="heading"></h3>
+    <label for="msg" id="msg-label"></label>
+    <textarea id="msg"></textarea>
+    <label for="at" id="at-label"></label>
+    <input id="at" type="datetime-local" />
+    <div class="row">
+      <button id="cancel" type="button"></button>
+      <button id="save" class="primary" type="button"></button>
+    </div>
+    <script type="module" src="./reminder.js"></script>
+  </body>
+</html>

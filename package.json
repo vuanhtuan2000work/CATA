@@ -1,0 +1,44 @@
+{
+  "name": "cursor-pet",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Living desktop cat for Cursor IDE — agent hooks, MCP reminders, follow-cursor overlay for Windows & macOS",
+  "keywords": [
+    "cursor",
+    "cursor-ide",
+    "desktop-pet",
+    "electron",
+    "mcp",
+    "cursor-hooks",
+    "ai-companion",
+    "developer-tools",
+    "overlay",
+    "reminder"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/vuanhtuan2000work/cursor-pet.git"
+  },
+  "bugs": {
+    "url": "https://github.com/vuanhtuan2000work/cursor-pet/issues"
+  },
+  "homepage": "https://github.com/vuanhtuan2000work/cursor-pet#readme",
+  "license": "MIT",
+  "author": "vuanhtuan2000work",
+  "workspaces": [
+    "apps/desktop",
+    "packages/mcp"
+  ],
+  "scripts": {
+    "build": "npm run build -w @cursor-pet/desktop && npm run build -w @cursor-pet/mcp",
+    "dev": "npm run dev -w @cursor-pet/desktop",
+    "start": "npm run start -w @cursor-pet/desktop",
+    "dist": "npm run dist -w @cursor-pet/desktop",
+    "dist:mac": "npm run dist:mac -w @cursor-pet/desktop",
+    "install:hooks": "node hooks/install-hooks.js",
+    "install:mcp": "node scripts/install-mcp.js"
+  },
+  "devDependencies": {
+    "typescript": "^7.0.2"
+  }
+}

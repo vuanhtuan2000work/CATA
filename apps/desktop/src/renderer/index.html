@@ -1,0 +1,175 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Cursor Pet</title>
+    <style>
+      html,
+      body {
+        margin: 0;
+        padding: 0;
+        width: 100vw;
+        height: 100vh;
+        overflow: hidden;
+        background: transparent;
+        user-select: none;
+      }
+      #pet {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 110px;
+        height: 110px;
+        object-fit: contain;
+        object-position: bottom center;
+        image-rendering: auto;
+        will-change: transform;
+        cursor: grab;
+        -webkit-user-drag: none;
+        pointer-events: auto;
+      }
+      #bubble {
+        position: absolute;
+        max-width: 260px;
+        padding: 10px 14px;
+        background: #fffdf5;
+        color: #243447;
+        border: 2px solid #243447;
+        border-radius: 14px;
+        font-family: -apple-system, "Segoe UI", sans-serif;
+        font-size: 13px;
+        line-height: 1.4;
+        box-shadow: 3px 3px 0 rgba(36, 52, 71, 0.25);
+        opacity: 0;
+        transition: opacity 0.18s ease;
+        pointer-events: none;
+        will-change: transform;
+      }
+      #bubble.visible {
+        opacity: 1;
+        pointer-events: auto;
+        cursor: pointer;
+      }
+      #bubble .title {
+        font-weight: 600;
+        margin-bottom: 2px;
+      }
+      #bubble::after {
+        content: "";
+        position: absolute;
+        bottom: -9px;
+        left: 26px;
+        border-width: 9px 8px 0 8px;
+        border-style: solid;
+        border-color: #243447 transparent transparent transparent;
+      }
+      #bubble .badge {
+        position: absolute;
+        top: -9px;
+        right: -9px;
+        min-width: 18px;
+        height: 18px;
+        border-radius: 9px;
+        background: #e26d6d;
+        color: #fff;
+        font-size: 11px;
+        font-weight: 700;
+        text-align: center;
+        line-height: 18px;
+        padding: 0 4px;
+        display: none;
+      }
+      #chat {
+        position: absolute;
+        width: 280px;
+        padding: 10px;
+        background: #fffdf5;
+        color: #243447;
+        border: 2px solid #243447;
+        border-radius: 14px;
+        font-family: -apple-system, "Segoe UI", sans-serif;
+        font-size: 13px;
+        box-shadow: 3px 3px 0 rgba(36, 52, 71, 0.25);
+        display: none;
+        pointer-events: auto;
+        z-index: 20;
+      }
+      #chat.open {
+        display: block;
+      }
+      #chat .hint {
+        font-size: 11px;
+        opacity: 0.7;
+        margin-bottom: 8px;
+      }
+      #chat .log {
+        max-height: 120px;
+        overflow-y: auto;
+        margin-bottom: 8px;
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+      }
+      #chat .log .line {
+        padding: 6px 8px;
+        border-radius: 8px;
+        background: #f3ebe0;
+      }
+      #chat .log .line.pet {
+        background: #ffe8c8;
+      }
+      #chat .log .line.you {
+        background: #e8f0f8;
+      }
+      #chat .row {
+        display: flex;
+        gap: 6px;
+      }
+      #chat input {
+        flex: 1;
+        border: 2px solid #243447;
+        border-radius: 8px;
+        padding: 6px 8px;
+        font: inherit;
+        background: #fff;
+      }
+      #chat button {
+        border: 2px solid #243447;
+        border-radius: 8px;
+        padding: 6px 10px;
+        font: inherit;
+        font-weight: 600;
+        background: #f2a65a;
+        cursor: pointer;
+      }
+      #chat .close {
+        position: absolute;
+        top: 6px;
+        right: 8px;
+        border: none;
+        background: transparent;
+        font-size: 16px;
+        cursor: pointer;
+        padding: 0 4px;
+      }
+    </style>
+  </head>
+  <body>
+    <img id="pet" draggable="false" alt="" />
+    <div id="bubble">
+      <div class="title"></div>
+      <div class="text"></div>
+      <div class="badge"></div>
+    </div>
+    <div id="chat">
+      <button class="close" id="chat-close" type="button" aria-label="Close">×</button>
+      <div class="hint" id="chat-hint"></div>
+      <div class="log" id="chat-log"></div>
+      <div class="row">
+        <input id="chat-input" type="text" maxlength="400" />
+        <button id="chat-send" type="button">Send</button>
+      </div>
+    </div>
+    <script type="module" src="./pet.js"></script>
+  </body>
+</html>

@@ -1,0 +1,42 @@
+{
+  "name": "@cursor-pet/desktop",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Cursor Pet desktop overlay (Electron)",
+  "main": "dist/main/index.js",
+  "scripts": {
+    "build": "tsc -p tsconfig.main.json && tsc -p tsconfig.renderer.json && node scripts/copy-static.js && node scripts/gen-icon.js",
+    "dev": "npm run build && electron .",
+    "start": "electron .",
+    "dist": "npm run build && electron-builder --win portable",
+    "dist:mac": "npm run build && electron-builder --mac"
+  },
+  "build": {
+    "appId": "com.cursorpet.desktop",
+    "productName": "Cursor Pet",
+    "files": [
+      "dist/**/*",
+      "assets/**/*"
+    ],
+    "directories": {
+      "output": "release"
+    },
+    "win": {
+      "target": [
+        "portable"
+      ]
+    },
+    "mac": {
+      "target": [
+        "dmg",
+        "zip"
+      ],
+      "category": "public.app-category.utilities"
+    }
+  },
+  "devDependencies": {
+    "@types/node": "^24.13.3",
+    "electron": "^43.1.1",
+    "electron-builder": "^26.15.3"
+  }
+}

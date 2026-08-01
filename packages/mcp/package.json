@@ -1,0 +1,21 @@
+{
+  "name": "@cursor-pet/mcp",
+  "version": "0.1.0",
+  "private": true,
+  "description": "MCP server exposing pet_say / pet_remind / pet_status for the Cursor Pet overlay",
+  "type": "module",
+  "bin": {
+    "cursor-pet-mcp": "dist/cli.js"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.json"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.29.0",
+    "zod": "^4.4.3"
+  },
+  "devDependencies": {
+    "@types/node": "^24.13.3",
+    "typescript": "^7.0.2"
+  }
+}
