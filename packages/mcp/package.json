@@ -1,6 +1,6 @@
 {
   "name": "cata-mcp",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "MCP server exposing cata_say / cata_remind / cata_status for the CATA desktop overlay",
   "type": "module",
   "main": "dist/cli.js",

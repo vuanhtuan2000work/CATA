@@ -30,7 +30,7 @@
     "packages/mcp"
   ],
   "scripts": {
-    "build": "npm run build -w @cata/desktop && npm run build -w @cata/mcp",
+    "build": "npm run build -w @cata/desktop && npm run build -w cata-mcp",
     "dev": "npm run dev -w @cata/desktop",
     "start": "npm run start -w @cata/desktop",
     "dist": "npm run dist -w @cata/desktop",
