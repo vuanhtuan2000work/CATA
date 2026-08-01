@@ -57,7 +57,12 @@ export function createOverlay(onReady: () => void): BrowserWindow {
 }
 
 export function setOverlayInteractive(interactive: boolean): void {
-  overlay?.setIgnoreMouseEvents(!interactive, { forward: true });
+  if (!overlay || overlay.isDestroyed()) return;
+  if (interactive) {
+    overlay.setIgnoreMouseEvents(false);
+  } else {
+    overlay.setIgnoreMouseEvents(true, { forward: true });
+  }
 }
 
 export function setPetVisible(visible: boolean): void {

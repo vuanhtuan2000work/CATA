@@ -29,7 +29,7 @@ function startReminderScheduler(): void {
         priority: "high",
       });
     }
-  }, 30_000);
+  }, 2_000);
 }
 
 function openChatInbox(): void {

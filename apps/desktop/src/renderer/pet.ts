@@ -336,8 +336,8 @@ function openChat(): void {
   chatSend.textContent = t(locale, "chatSend");
   appendChat("pet", t(locale, "chatWelcome"));
   positionChat();
-  window.petBridge.setInteractive(true);
   interactive = true;
+  window.petBridge.setInteractive(true);
   setTimeout(() => chatInput.focus(), 50);
 }
 
@@ -347,21 +347,69 @@ function closeChat(): void {
   chatEl.classList.remove("open");
   chatLog.innerHTML = "";
   chatInput.value = "";
+  interactive = false;
+  window.petBridge.setInteractive(false);
   window.petBridge.notifyChatClosed();
 }
 
-function parseReminder(text: string): { minutes: number; message: string } | null {
-  const withMins = text.match(
-    /^(?:remind|nhắc)\s+(?:me\s+)?(?:in\s+)?(\d+)\s*(?:m|min|mins|minute|minutes|phút)?\s*(?:to\s+)?[:\-]?\s*(.+)$/i
-  );
-  if (withMins) {
-    return { minutes: Math.max(1, Number(withMins[1])), message: withMins[2]!.trim() };
+function parseReminder(text: string): { minutes: number; message: string; atISO?: string } | null {
+  const lower = text.toLowerCase().trim();
+
+  // Keywords indicating reminder / alarm intent
+  const isReminderIntent =
+    /^(?:remind|nhắc|nhac|hẹn|hen|báo|bao|alarm|timer|thông báo|thong bao)/i.test(lower) ||
+    /(?:remind|nhắc|nhac|hẹn|hen|báo|bao|alarm|timer)\s+(?:tôi|me|cho tôi|dùm|giùm)/i.test(lower) ||
+    /(?:nữa|nuoc|sau)\s+(?:nhắc|hẹn|báo)/i.test(lower);
+
+  if (!isReminderIntent) return null;
+
+  // 1. Check for specific time format like "14:30", "14h30", "9h00", "9:00"
+  const clockMatch = lower.match(/(?:vào\s+lúc|lúc|at)?\s*(\d{1,2})[h:](\d{2})/i);
+  if (clockMatch) {
+    const hours = Number(clockMatch[1]);
+    const mins = Number(clockMatch[2]);
+    if (hours >= 0 && hours < 24 && mins >= 0 && mins < 60) {
+      const target = new Date();
+      target.setHours(hours, mins, 0, 0);
+      if (target.getTime() <= Date.now()) {
+        target.setDate(target.getDate() + 1);
+      }
+      const diffMinutes = Math.max(1, Math.round((target.getTime() - Date.now()) / 60000));
+      let message = text
+        .replace(/(?:remind|nhắc|nhac|hẹn|hen|báo|bao|alarm|timer|thông báo|thong bao)\s*(?:tôi|me|cho tôi|dùm|giùm)?/gi, "")
+        .replace(/(?:vào\s+lúc|lúc|at)?\s*\d{1,2}[h:]\d{2}/gi, "")
+        .trim();
+      if (!message) message = "Alarm / Reminder";
+      return { minutes: diffMinutes, message, atISO: target.toISOString() };
+    }
   }
-  const noMins = text.match(/^(?:remind|nhắc)\s+(?:me\s+)?(?:to\s+)?(.+)$/i);
-  if (noMins) {
-    return { minutes: 5, message: noMins[1]!.trim() };
+
+  // 2. Check for duration format (minutes / hours / seconds)
+  const minMatch = lower.match(/(\d+)\s*(?:m|min|mins|minute|minutes|p|phút|phut)/i);
+  const hrMatch = lower.match(/(\d+)\s*(?:h|hr|hrs|hour|hours|tiếng|tieng|giờ|gio)/i);
+  const secMatch = lower.match(/(\d+)\s*(?:s|sec|secs|second|seconds|g|giây|giay)/i);
+
+  let minutes = 5;
+  if (minMatch) {
+    minutes = Math.max(1, Number(minMatch[1]));
+  } else if (hrMatch) {
+    minutes = Math.max(1, Number(hrMatch[1]) * 60);
+  } else if (secMatch) {
+    minutes = Math.max(1, Math.round(Number(secMatch[1]) / 60));
   }
-  return null;
+
+  let cleanMessage = text
+    .replace(/(?:remind|nhắc|nhac|hẹn|hen|báo|bao|alarm|timer|thông báo|thong bao)\s*(?:tôi|me|cho tôi|dùm|giùm)?/gi, "")
+    .replace(/(?:in|sau|trong)?\s*\d+\s*(?:m|min|mins|minute|minutes|p|phút|phut|h|hr|hrs|hour|hours|tiếng|tieng|giờ|gio|s|sec|secs|second|seconds|g|giây|giay)?\s*(?:nữa|nuoc|nua)?/gi, "")
+    .replace(/^(?:to|để|de|về|ve)\s+/gi, "")
+    .trim();
+
+  if (!cleanMessage || cleanMessage.length < 2) {
+    cleanMessage = "Alarm / Reminder";
+  }
+
+  const atISO = new Date(Date.now() + minutes * 60_000).toISOString();
+  return { minutes, message: cleanMessage, atISO };
 }
 
 function handleChatSend(): void {
@@ -372,7 +420,7 @@ function handleChatSend(): void {
 
   const reminder = parseReminder(text);
   if (reminder) {
-    void window.petBridge.scheduleReminder(reminder.message, reminder.minutes);
+    void window.petBridge.addReminder(reminder.message, reminder.atISO);
     const reply = t(locale, "chatReminderSet", {
       minutes: String(reminder.minutes),
       message: reminder.message,
@@ -398,8 +446,18 @@ petEl.addEventListener("dblclick", () => {
   }
 });
 
-chatClose.addEventListener("click", () => closeChat());
-chatSend.addEventListener("click", () => handleChatSend());
+chatClose.addEventListener("click", (e) => {
+  e.preventDefault();
+  e.stopPropagation();
+  closeChat();
+});
+
+chatSend.addEventListener("click", (e) => {
+  e.preventDefault();
+  e.stopPropagation();
+  handleChatSend();
+});
+
 chatInput.addEventListener("keydown", (e) => {
   if (e.key === "Enter") handleChatSend();
   if (e.key === "Escape") closeChat();
