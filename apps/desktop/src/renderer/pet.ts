@@ -270,13 +270,23 @@ window.addEventListener("mousemove", (e) => {
     return;
   }
   const over =
-    chatOpen ||
     isOverPet(e.clientX, e.clientY) ||
     isOverChat(e.clientX, e.clientY) ||
     speech.containsPoint(e.clientX, e.clientY);
   if (over !== interactive) {
     interactive = over;
     window.petBridge.setInteractive(over);
+  }
+});
+
+window.addEventListener("mousedown", (e) => {
+  if (
+    chatOpen &&
+    !isOverChat(e.clientX, e.clientY) &&
+    !isOverPet(e.clientX, e.clientY) &&
+    !speech.containsPoint(e.clientX, e.clientY)
+  ) {
+    closeChat();
   }
 });
 
@@ -356,8 +366,6 @@ function openChat(): void {
   chatSend.textContent = t(locale, "chatSend");
   appendChat("pet", t(locale, "chatWelcome"));
   positionChat();
-  interactive = true;
-  window.petBridge.setInteractive(true);
   setTimeout(() => chatInput.focus(), 50);
 }
 
