@@ -5,3 +5,8 @@ release/
 .DS_Store
 Thumbs.db
 *.tsbuildinfo
+.env
+*.env
+*.env.*
+*.pem
+*.key
