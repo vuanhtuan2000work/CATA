@@ -135,6 +135,13 @@ function updateSpeechState(now: number): void {
 }
 
 function stepPhysics(now: number, dt: number): void {
+  if (chatOpen) {
+    if (state.kind !== "idle" && state.kind !== "talk" && state.kind !== "drag") {
+      state = { kind: "idle", until: now + 2000 };
+    }
+    return;
+  }
+
   if (shouldChase() && (state.kind === "idle" || state.kind === "walk" || state.kind === "run" || state.kind === "sleep")) {
     state = { kind: "chase" };
   }
@@ -322,8 +329,7 @@ function appendChat(role: "you" | "pet", text: string): void {
 function positionChat(): void {
   if (!chatOpen) return;
   const chatWidth = 280;
-  const chatRect = chatEl.getBoundingClientRect();
-  const chatHeight = chatRect.height || 220;
+  const chatHeight = chatEl.offsetHeight || 260;
 
   const bubbleShowing = bubbleEl.classList.contains("visible");
   const bRect = bubbleShowing ? bubbleEl.getBoundingClientRect() : null;
@@ -344,20 +350,16 @@ function positionChat(): void {
   let cx: number;
   let cy: number;
 
-  if (rightX + chatWidth <= window.innerWidth - 8) {
+  if (rightX + chatWidth <= window.innerWidth - 12) {
     cx = rightX;
-    cy = Math.max(8, Math.min(window.innerHeight - chatHeight - 8, y + displayH - chatHeight));
-  } else if (leftX >= 8) {
+    cy = Math.max(12, Math.min(window.innerHeight - chatHeight - 12, y + displayH - chatHeight));
+  } else if (leftX >= 12) {
     cx = leftX;
-    cy = Math.max(8, Math.min(window.innerHeight - chatHeight - 8, y + displayH - chatHeight));
+    cy = Math.max(12, Math.min(window.innerHeight - chatHeight - 12, y + displayH - chatHeight));
   } else {
-    cx = Math.max(8, Math.min(window.innerWidth - chatWidth - 8, x + displayW / 2 - chatWidth / 2));
-    const topLimit = bRect && bRect.height > 0 ? Math.min(y, bRect.top) : y;
-    if (topLimit - chatHeight - 16 >= 8) {
-      cy = topLimit - chatHeight - 16;
-    } else {
-      cy = y + displayH + 16;
-    }
+    cx = Math.max(12, Math.min(window.innerWidth - chatWidth - 12, x + displayW / 2 - chatWidth / 2));
+    const highestTop = bRect && bRect.height > 0 ? Math.min(y, bRect.top) : y;
+    cy = Math.max(12, highestTop - chatHeight - 16);
   }
 
   chatEl.style.left = `${cx}px`;
