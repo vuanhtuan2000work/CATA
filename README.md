@@ -5,12 +5,13 @@
 </p>
 
 <p align="center">
-  <strong>A living desktop cat for AI Agents & IDEs (<a href="https://antigravity.google">Google Antigravity</a>, <a href="https://cursor.com">Cursor</a>, etc.)</strong><br/>
+  <strong>A living desktop cat for AI Agents & IDEs (<a href="https://antigravity.google">Google Antigravity</a>, <a href="https://cursor.com">Cursor</a>, <a href="https://www.npmjs.com/package/cata-mcp">Codex</a>, etc.)</strong><br/>
   Celebrates finished agent work · Follows your mouse · Reminds you what matters
 </p>
 
 <p align="center">
   <a href="https://github.com/vuanhtuan2000work/CATA/stargazers"><img src="https://img.shields.io/github/stars/vuanhtuan2000work/CATA?style=flat-square" alt="Stars" /></a>
+  <a href="https://www.npmjs.com/package/cata-mcp"><img src="https://img.shields.io/npm/v/cata-mcp.svg?style=flat-square" alt="npm cata-mcp" /></a>
   <a href="./LICENSE"><img src="https://img.shields.io/badge/license-MIT-yellow.svg?style=flat-square" alt="MIT" /></a>
   <a href="#quick-start"><img src="https://img.shields.io/badge/platform-Windows%20%7C%20macOS-blue?style=flat-square" alt="Platform" /></a>
   <a href="#quick-start"><img src="https://img.shields.io/badge/node-%3E%3D20-brightgreen?style=flat-square" alt="Node" /></a>
@@ -45,8 +46,9 @@ Local-only on `127.0.0.1` — no cloud, no telemetry.
 - **Smart Pause on Open** — pet automatically pauses movement when chat is open so it won't walk under the popup
 - **Pass-through Clickability** — dynamic hit-testing allows clicking any other desktop application or window freely while chat is open
 - **Double-Click Toggle & Auto-Close** — double-click pet to toggle open/close; click outside chat to auto-close
+- **Official NPM MCP Package** — run [`npx cata-mcp`](https://www.npmjs.com/package/cata-mcp) anywhere without manual server setup
 - **i18n** — Auto from system / IDE locale, or force en · vi · zh · ja · ko
-- **MCP tools** — agents in Google Antigravity or Cursor can `cata_say`, `cata_remind`, `cata_status`
+- **MCP tools** — agents in Google Antigravity, Cursor, Codex, or Claude Desktop can `cata_say`, `cata_remind`, `cata_status`
 - **Git watcher** — celebrate commits outside IDEs too
 - **Physics splat** — drop from high enough → puddle → pop back
 - **Single tray icon** — one instance only
@@ -68,16 +70,39 @@ npm run build
 ```bash
 npm run install:mcp:antigravity
 ```
-Registers CATA in `~/.gemini/config/mcp_config.json`.
+Or simply use `npx cata-mcp` in `~/.gemini/config/mcp_config.json`:
+```json
+{
+  "mcpServers": {
+    "cata": {
+      "command": "npx",
+      "args": ["-y", "cata-mcp"]
+    }
+  }
+}
+```
 
 ### Install MCP for Cursor
 ```bash
 npm run install:mcp
 npm run install:hooks   # ~/.cursor/hooks.json
 ```
-Registers CATA in `~/.cursor/mcp.json` and configures Cursor hooks.
+Or simply use `npx cata-mcp` in `~/.cursor/mcp.json`.
 
-### Start CATA
+### Install MCP for Codex / Claude Desktop / General Hosts
+Add to your MCP host configuration:
+```json
+{
+  "mcpServers": {
+    "cata": {
+      "command": "npx",
+      "args": ["-y", "cata-mcp"]
+    }
+  }
+}
+```
+
+### Start CATA Desktop App
 ```bash
 npm start
 ```
@@ -97,9 +122,9 @@ npm run dist:mac    # .dmg + .zip (build on a Mac)
 ## How it works
 
 ```text
-Google Antigravity / Cursor / MCP ──POST──► 127.0.0.1:7331 ──IPC──► Overlay pet
-                                                   ▲
-                                 Tray · Chat inbox · Git reflog watcher
+Google Antigravity / Cursor / Codex / MCP ──POST──► 127.0.0.1:7331 ──IPC──► Overlay pet
+                                                          ▲
+                                        Tray · Chat inbox · Git reflog watcher
 ```
 
 1. Electron opens a **full-screen transparent overlay** (click-through by default).
@@ -119,9 +144,9 @@ Double-click the pet (or use the tray menu):
 
 ---
 
-## MCP tools
+## MCP tools ([`cata-mcp`](https://www.npmjs.com/package/cata-mcp))
 
-Supported in **Google Antigravity**, **Cursor**, and any standard MCP host:
+Supported in **Google Antigravity**, **Cursor**, **Codex**, **Claude Desktop**, and any standard MCP host:
 
 | Tool | Alias | Purpose |
 |------|-------|---------|
@@ -129,7 +154,7 @@ Supported in **Google Antigravity**, **Cursor**, and any standard MCP host:
 | `cata_remind` | `pet_remind` | Schedule a reminder (`at` = ISO, or soon) |
 | `cata_status` | `pet_status` | App running? Pending reminders? |
 
-Example prompt for your AI agent in Antigravity or Cursor:
+Example prompt for your AI agent:
 > *"When you're done building the feature, call `cata_say` to tell me the PR is ready."*
 
 ---
@@ -189,7 +214,7 @@ Override the port with `CATA_PORT` (app, hooks, and MCP all honor it).
 ```text
 CATA/
 ├── apps/desktop/     Electron overlay (main + renderer + frames)
-├── packages/mcp/     MCP server → localhost API
+├── packages/mcp/     Official cata-mcp server (npm package)
 ├── hooks/            Cursor hook scripts + installer
 └── scripts/          MCP installers for Antigravity & Cursor
 ```
@@ -221,7 +246,7 @@ Issues and PRs welcome.
 <details>
 <summary><strong>Tiếng Việt</strong></summary>
 
-**CATA** là chú mèo desktop trên overlay trong suốt: báo khi AI agent (Google Antigravity, Cursor, v.v.) hoàn thành công việc, đuổi theo con trỏ chuột, tự động nhận diện thời gian gõ trong chat để hẹn giờ nhắc việc, chat inbox local, và nhận thông báo qua giao thức MCP (`cata_say`, `cata_remind`).
+**CATA** là chú mèo desktop trên overlay trong suốt: báo khi AI agent (Google Antigravity, Cursor, Codex, v.v.) hoàn thành công việc, đuổi theo con trỏ chuột, tự động nhận diện thời gian gõ trong chat để hẹn giờ nhắc việc, chat inbox local, và nhận thông báo qua giao thức MCP (`cata_say`, `cata_remind`).
 
 ### Hướng dẫn cài đặt nhanh:
 ```bash
@@ -231,7 +256,21 @@ npm run install:mcp               # Cắm MCP vào Cursor
 npm start
 ```
 
-### Điểm nổi bật mới:
+### Sử dụng MCP trực tiếp qua NPM (Không cần clone repo):
+Gói MCP chính thức đã có mặt trên npm registry: [`cata-mcp`](https://www.npmjs.com/package/cata-mcp). Bạn có thể cấu hình ở bất kỳ máy nào:
+```json
+{
+  "mcpServers": {
+    "cata": {
+      "command": "npx",
+      "args": ["-y", "cata-mcp"]
+    }
+  }
+}
+```
+
+### Điểm nổi bật:
+- **NPM Package**: Chạy trực tiếp `npx cata-mcp` trên mọi máy.
 - **Tự động đọc giờ tự nhiên**: Gõ `"nhắc 10 phút review pr"`, `"họp team lúc 14:30"`, `"1 tiếng nữa đi ngủ"` tự động tạo báo thức.
 - **Nút chọn nhanh (`+5m`, `+15m`, `+30m`, `+1h`)**: Chọn nhanh thời gian 1-click.
 - **Vị trí hiển thị tách biệt 100%**: Khung chat tự động né chú mèo và bóng thoại (khoảng cách `16px`), dừng mèo di chuyển khi chat mở.
