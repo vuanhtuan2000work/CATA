@@ -5,7 +5,7 @@
 </p>
 
 <p align="center">
-  <strong>A living desktop cat for AI Agents & IDEs (<a href="https://antigravity.google">Antigravity</a>, <a href="https://cursor.com">Cursor</a>, etc.)</strong><br/>
+  <strong>A living desktop cat for AI Agents & IDEs (<a href="https://antigravity.google">Google Antigravity</a>, <a href="https://cursor.com">Cursor</a>, etc.)</strong><br/>
   Celebrates finished agent work · Follows your mouse · Reminds you what matters
 </p>
 
@@ -27,8 +27,8 @@ Long AI coding sessions feel empty when the agent finishes in silence. CATA puts
 |---|---|
 | **Announce** | Agent stop, todo done, commit / push |
 | **Chase** | Follows your cursor (toggle anytime) |
-| **Remind** | Tray, chat inbox, or MCP `cata_remind` |
-| **Stay out of the way** | Click-through until you point at the cat |
+| **Remind** | Natural language chat input, quick time chips (`+5m`, `+15m`), or MCP `cata_remind` |
+| **Stay out of the way** | Pass-through clickability — click any app on screen while chat is open |
 
 Local-only on `127.0.0.1` — no cloud, no telemetry.
 
@@ -39,9 +39,14 @@ Local-only on `127.0.0.1` — no cloud, no telemetry.
 - **Transparent overlay** — always-on-top, frameless, drag / double-click / roam
 - **Follow cursor** — sprint after the mouse; tray toggle
 - **AI Agent & IDE hooks** — agent stop, `TodoWrite`, `git commit` / `git push`
-- **Chat inbox** — double-click the pet (or tray → Chat inbox) for notes & quick reminders
+- **Smart Natural Language Reminders** — auto-detects duration (`10m`, `30 phút`, `1h`) or exact time (`14:30`, `9h00`) in VI/EN directly from chat input
+- **Quick Time Preset Chips** — 1-click preset buttons (`+5m`, `+15m`, `+30m`, `+1h`) for instant alarm scheduling
+- **Zero-Overlap Position Engine** — popup automatically positions beside or above pet (with 16px gap) so it NEVER covers the pet or speech bubbles, even on screen boundaries
+- **Smart Pause on Open** — pet automatically pauses movement when chat is open so it won't walk under the popup
+- **Pass-through Clickability** — dynamic hit-testing allows clicking any other desktop application or window freely while chat is open
+- **Double-Click Toggle & Auto-Close** — double-click pet to toggle open/close; click outside chat to auto-close
 - **i18n** — Auto from system / IDE locale, or force en · vi · zh · ja · ko
-- **MCP tools** — agents in Antigravity or Cursor can `cata_say`, `cata_remind`, `cata_status`
+- **MCP tools** — agents in Google Antigravity or Cursor can `cata_say`, `cata_remind`, `cata_status`
 - **Git watcher** — celebrate commits outside IDEs too
 - **Physics splat** — drop from high enough → puddle → pop back
 - **Single tray icon** — one instance only
@@ -92,9 +97,9 @@ npm run dist:mac    # .dmg + .zip (build on a Mac)
 ## How it works
 
 ```text
-Antigravity / Cursor / MCP ──POST──► 127.0.0.1:7331 ──IPC──► Overlay pet
-                                           ▲
-                         Tray · Chat inbox · Git reflog watcher
+Google Antigravity / Cursor / MCP ──POST──► 127.0.0.1:7331 ──IPC──► Overlay pet
+                                                   ▲
+                                 Tray · Chat inbox · Git reflog watcher
 ```
 
 1. Electron opens a **full-screen transparent overlay** (click-through by default).
@@ -103,14 +108,14 @@ Antigravity / Cursor / MCP ──POST──► 127.0.0.1:7331 ──IPC──►
 
 ---
 
-## Chat inbox
+## Chat inbox & Reminders
 
 Double-click the pet (or use the tray menu):
 
-- Leave a short note → the pet acknowledges in a bubble
-- Set a reminder, e.g. `remind me in 10m to review the PR`
-
-This is a **local** inbox (notes / reminders). It does **not** replace AI Agent chat.
+- **Auto-Detect Reminders:** Type any task with time (`"Review PR sau 10m"`, `"Họp team lúc 14:30"`, `"Go to sleep in 30 mins"`) and CATA will parse and schedule the alarm automatically.
+- **Quick Preset Chips:** Click `+5m`, `+15m`, `+30m`, or `+1h` chips before sending any note.
+- **Pass-through Clicking:** Keep working! Click any background app while the chat box is open.
+- **Double-Click Toggle:** Double-click the cat again or click anywhere outside to close.
 
 ---
 
@@ -124,7 +129,7 @@ Supported in **Google Antigravity**, **Cursor**, and any standard MCP host:
 | `cata_remind` | `pet_remind` | Schedule a reminder (`at` = ISO, or soon) |
 | `cata_status` | `pet_status` | App running? Pending reminders? |
 
-Example prompt for your AI agent:
+Example prompt for your AI agent in Antigravity or Cursor:
 > *"When you're done building the feature, call `cata_say` to tell me the PR is ready."*
 
 ---
@@ -216,14 +221,22 @@ Issues and PRs welcome.
 <details>
 <summary><strong>Tiếng Việt</strong></summary>
 
-**CATA** là chú mèo desktop trên overlay trong suốt: báo khi AI agent (Antigravity, Cursor, v.v.) hoàn thành công việc, đuổi theo con trỏ chuột, nhắc việc, chat inbox local, và nhận thông báo qua giao thức MCP (`cata_say`, `cata_remind`).
+**CATA** là chú mèo desktop trên overlay trong suốt: báo khi AI agent (Google Antigravity, Cursor, v.v.) hoàn thành công việc, đuổi theo con trỏ chuột, tự động nhận diện thời gian gõ trong chat để hẹn giờ nhắc việc, chat inbox local, và nhận thông báo qua giao thức MCP (`cata_say`, `cata_remind`).
 
+### Hướng dẫn cài đặt nhanh:
 ```bash
 npm install && npm run build
-npm run install:mcp:antigravity   # Cắm MCP vào Antigravity
+npm run install:mcp:antigravity   # Cắm MCP vào Google Antigravity
 npm run install:mcp               # Cắm MCP vào Cursor
 npm start
 ```
+
+### Điểm nổi bật mới:
+- **Tự động đọc giờ tự nhiên**: Gõ `"nhắc 10 phút review pr"`, `"họp team lúc 14:30"`, `"1 tiếng nữa đi ngủ"` tự động tạo báo thức.
+- **Nút chọn nhanh (`+5m`, `+15m`, `+30m`, `+1h`)**: Chọn nhanh thời gian 1-click.
+- **Vị trí hiển thị tách biệt 100%**: Khung chat tự động né chú mèo và bóng thoại (khoảng cách `16px`), dừng mèo di chuyển khi chat mở.
+- **Click xuyên màn hình**: Vẫn click làm việc bình thường với các phần mềm khác khi khung chat đang mở.
+- **Double click bật/tắt**: Double click mèo để mở/tắt khung chat nhanh.
 
 </details>
 
