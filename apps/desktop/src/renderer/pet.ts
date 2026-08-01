@@ -342,28 +342,21 @@ function positionChat(): void {
   }
 
   let cx: number;
-  if (rightX + chatWidth <= window.innerWidth - 12) {
+  let cy: number;
+
+  if (rightX + chatWidth <= window.innerWidth - 8) {
     cx = rightX;
-  } else if (leftX >= 12) {
+    cy = Math.max(8, Math.min(window.innerHeight - chatHeight - 8, y + displayH - chatHeight));
+  } else if (leftX >= 8) {
     cx = leftX;
+    cy = Math.max(8, Math.min(window.innerHeight - chatHeight - 8, y + displayH - chatHeight));
   } else {
-    cx = Math.max(12, Math.min(window.innerWidth - chatWidth - 12, x + displayW + 16));
-  }
-
-  let cy = y + displayH - chatHeight;
-  if (cy < 12) cy = 12;
-  if (cy + chatHeight > window.innerHeight - 12) {
-    cy = window.innerHeight - chatHeight - 12;
-  }
-
-  if (bRect && bRect.height > 0) {
-    const overlapsX = cx < Math.max(petRight, bRect.right) && cx + chatWidth > Math.min(petLeft, bRect.left);
-    if (overlapsX) {
-      if (bRect.top - chatHeight - 16 >= 12) {
-        cy = bRect.top - chatHeight - 16;
-      } else {
-        cy = Math.min(window.innerHeight - chatHeight - 12, y + displayH + 16);
-      }
+    cx = Math.max(8, Math.min(window.innerWidth - chatWidth - 8, x + displayW / 2 - chatWidth / 2));
+    const topLimit = bRect && bRect.height > 0 ? Math.min(y, bRect.top) : y;
+    if (topLimit - chatHeight - 16 >= 8) {
+      cy = topLimit - chatHeight - 16;
+    } else {
+      cy = y + displayH + 16;
     }
   }
 
@@ -478,10 +471,12 @@ function handleChatSend(): void {
   chirp(880, config.muted);
 }
 
-petEl.addEventListener("dblclick", () => {
+petEl.addEventListener("dblclick", (e) => {
+  e.preventDefault();
+  e.stopPropagation();
   chirp(740, config.muted);
   if (chatOpen) {
-    speech.enqueue({ message: randomGreeting(), priority: "normal" });
+    closeChat();
   } else {
     openChat();
   }
