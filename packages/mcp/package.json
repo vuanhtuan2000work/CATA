@@ -1,15 +1,33 @@
 {
   "name": "@cata/mcp",
   "version": "0.1.0",
-  "private": true,
-  "description": "MCP server exposing pet_say / pet_remind / pet_status for the CATA desktop overlay",
+  "description": "MCP server exposing cata_say / cata_remind / cata_status for the CATA desktop overlay",
   "type": "module",
+  "main": "dist/cli.js",
   "bin": {
-    "cata-mcp": "dist/cli.js"
+    "cata-mcp": "dist/cli.js",
+    "cata": "dist/cli.js"
+  },
+  "publishConfig": {
+    "access": "public"
   },
   "scripts": {
     "build": "tsc -p tsconfig.json"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vuanhtuan2000work/CATA.git"
+  },
+  "keywords": [
+    "mcp",
+    "model-context-protocol",
+    "cata",
+    "antigravity",
+    "cursor",
+    "desktop-pet"
+  ],
+  "author": "vuanhtuan2000work",
+  "license": "MIT",
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.29.0",
     "zod": "^4.4.3"
