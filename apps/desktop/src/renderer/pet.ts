@@ -352,16 +352,13 @@ function closeChat(): void {
   window.petBridge.notifyChatClosed();
 }
 
-function parseReminder(text: string): { minutes: number; message: string; atISO?: string } | null {
+let selectedPresetMins: number | null = null;
+
+function parseReminder(
+  text: string,
+  presetMins: number | null
+): { minutes: number; message: string; atISO: string } {
   const lower = text.toLowerCase().trim();
-
-  // Keywords indicating reminder / alarm intent
-  const isReminderIntent =
-    /^(?:remind|nhắc|nhac|hẹn|hen|báo|bao|alarm|timer|thông báo|thong bao)/i.test(lower) ||
-    /(?:remind|nhắc|nhac|hẹn|hen|báo|bao|alarm|timer)\s+(?:tôi|me|cho tôi|dùm|giùm)/i.test(lower) ||
-    /(?:nữa|nuoc|sau)\s+(?:nhắc|hẹn|báo)/i.test(lower);
-
-  if (!isReminderIntent) return null;
 
   // 1. Check for specific time format like "14:30", "14h30", "9h00", "9:00"
   const clockMatch = lower.match(/(?:vào\s+lúc|lúc|at)?\s*(\d{1,2})[h:](\d{2})/i);
@@ -379,7 +376,7 @@ function parseReminder(text: string): { minutes: number; message: string; atISO?
         .replace(/(?:remind|nhắc|nhac|hẹn|hen|báo|bao|alarm|timer|thông báo|thong bao)\s*(?:tôi|me|cho tôi|dùm|giùm)?/gi, "")
         .replace(/(?:vào\s+lúc|lúc|at)?\s*\d{1,2}[h:]\d{2}/gi, "")
         .trim();
-      if (!message) message = "Alarm / Reminder";
+      if (!message) message = text;
       return { minutes: diffMinutes, message, atISO: target.toISOString() };
     }
   }
@@ -389,7 +386,7 @@ function parseReminder(text: string): { minutes: number; message: string; atISO?
   const hrMatch = lower.match(/(\d+)\s*(?:h|hr|hrs|hour|hours|tiếng|tieng|giờ|gio)/i);
   const secMatch = lower.match(/(\d+)\s*(?:s|sec|secs|second|seconds|g|giây|giay)/i);
 
-  let minutes = 5;
+  let minutes = presetMins ?? 5;
   if (minMatch) {
     minutes = Math.max(1, Number(minMatch[1]));
   } else if (hrMatch) {
@@ -404,8 +401,8 @@ function parseReminder(text: string): { minutes: number; message: string; atISO?
     .replace(/^(?:to|để|de|về|ve)\s+/gi, "")
     .trim();
 
-  if (!cleanMessage || cleanMessage.length < 2) {
-    cleanMessage = "Alarm / Reminder";
+  if (!cleanMessage || cleanMessage.length < 1) {
+    cleanMessage = text;
   }
 
   const atISO = new Date(Date.now() + minutes * 60_000).toISOString();
@@ -418,23 +415,19 @@ function handleChatSend(): void {
   chatInput.value = "";
   appendChat("you", text);
 
-  const reminder = parseReminder(text);
-  if (reminder) {
-    void window.petBridge.addReminder(reminder.message, reminder.atISO);
-    const reply = t(locale, "chatReminderSet", {
-      minutes: String(reminder.minutes),
-      message: reminder.message,
-    });
-    appendChat("pet", reply);
-    speech.enqueue({ message: reply, priority: "normal" });
-    chirp(880, config.muted);
-    return;
-  }
+  const reminder = parseReminder(text, selectedPresetMins);
+  void window.petBridge.addReminder(reminder.message, reminder.atISO);
 
-  const reply = t(locale, "chatAck", { text: text.slice(0, 80) });
-  appendChat("pet", reply);
-  speech.enqueue({ message: text.slice(0, 120), priority: "normal" });
-  chirp(660, config.muted);
+  selectedPresetMins = null;
+  document.querySelectorAll("#quick-times .chip").forEach((btn) => btn.classList.remove("selected"));
+
+  const reply = t(locale, "chatReminderSet", {
+    minutes: String(reminder.minutes),
+    message: reminder.message,
+  });
+  appendChat("pet", `⏰ ${reply}`);
+  speech.enqueue({ message: reply, priority: "normal" });
+  chirp(880, config.muted);
 }
 
 petEl.addEventListener("dblclick", () => {
@@ -461,6 +454,22 @@ chatSend.addEventListener("click", (e) => {
 chatInput.addEventListener("keydown", (e) => {
   if (e.key === "Enter") handleChatSend();
   if (e.key === "Escape") closeChat();
+});
+
+document.querySelectorAll("#quick-times .chip").forEach((chipBtn) => {
+  chipBtn.addEventListener("click", (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    const mins = Number((chipBtn as HTMLElement).dataset.mins);
+    if (selectedPresetMins === mins) {
+      selectedPresetMins = null;
+      chipBtn.classList.remove("selected");
+    } else {
+      document.querySelectorAll("#quick-times .chip").forEach((b) => b.classList.remove("selected"));
+      selectedPresetMins = mins;
+      chipBtn.classList.add("selected");
+    }
+  });
 });
 
 window.petBridge.onOpenChat(() => openChat());
